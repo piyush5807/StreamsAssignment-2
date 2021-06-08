@@ -78,16 +78,23 @@ public class Person {
     System.out.println("List of all the people who are either greater than 20 or contain any vowel in their name");
     List<String> vowelsList = new ArrayList<>(Arrays.asList("a", "e", "i", "o", "u"));
     List<Person> li = people.stream().filter(i->i.getAge()>20 
-                            ||vowelsList.contains(i.getName())).collect(Collectors.toList());
+                            ||vowelsList.contains(i.getName())).collect(Collectors.toList());   // This logic is incorrect, you are checking name in the vowel list which would never be found
+                                                                                               // you need to search whether any vowel exist in the name or not 
     li.forEach(System.out::println);
+        
+    // The following should be the correct way to do it. 
 
+    people.stream().filter(i->i.getAge()>20 || i.getName().contains('a') || i.getName().contains('e') || i.getName().contains('i') ....).collect(Collectors.toList()); 
 
     
     
     // 3.Create a list of people, sorted in ascending order on the basis of age, if age is the same then sort in descending order of name
     // Collections.sort(people,Comparator.comparing(Person::getAge).thenComparing(Comparator.comparing(Person::getName)).reversed());
     System.out.println("---------------------------------------list of people, sorted in ascending order on the basis of age-------------------------");
-    people.sort(Comparator.comparing(Person::getAge).thenComparing(Comparator.comparing(Person::getName)).reversed());
+//     people.sort(Comparator.comparing(Person::getAge).thenComparing(Comparator.comparing(Person::getName)).reversed()); second Comparator.comparing is redundant but logic is correct
+    
+    people.sort(Comparator.comparing(Person::getAge).thenComparing(Person::getName).reversed());
+        
     people.forEach(System.out::println);
 
     // Q4. Create a map from this people list where the key is country name and value is count which means a map will tell how many people live in a particular country
